@@ -44,9 +44,11 @@ export default function Dashboard() {
       {/* Call to Action */}
       <div style={{ backgroundColor: '#1e293b', padding: '30px', borderRadius: '20px', textAlign: 'center' }}>
         <h3>Ready to grow your capital?</h3>
-        <button style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', fontWeight: 'bold', marginTop: '15px', cursor: 'pointer' }}>
-          Explore Investment Plans
-        </button>
+       <a href="/dashboard/plans" style={{ textDecoration: 'none' }}>
+  <button style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', fontWeight: 'bold', marginTop: '15px', cursor: 'pointer' }}>
+    Explore Investment Plans
+  </button>
+</a>
       </div>
     </div>
   )
