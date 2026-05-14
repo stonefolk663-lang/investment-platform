@@ -16,47 +16,46 @@ export default function Dashboard() {
 
   return (
     <div style={{ backgroundColor: '#020617', color: 'white', minHeight: '100vh', padding: '20px' }}>
-      {/* Top Navigation */}
+      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', borderBottom: '1px solid #1e293b', paddingBottom: '20px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>SpringWealth <span style={{ color: '#2563eb' }}>Portal</span></h1>
         <div style={{ textAlign: 'right' }}>
-          <p style={{ fontSize: '14px', color: '#94a3b8' }}>Welcome back,</p>
+          <p style={{ fontSize: '14px', color: '#94a3b8' }}>Welcome,</p>
           <p style={{ fontWeight: 'bold' }}>{user?.user_metadata?.full_name || 'Investor'}</p>
         </div>
       </div>
 
-      {/* Money Stats Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-        <div style={{ backgroundColor: '#0f172a', padding: '25px', borderRadius: '16px', border: '1px solid #1e293b' }}>
-          <p style={{ color: '#94a3b8', fontSize: '14px' }}>Total Balance</p>
-          <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginTop: '10px' }}>$0.00</h2>
+      {/* Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '30px' }}>
+        <div style={{ backgroundColor: '#0f172a', padding: '20px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+          <p style={{ color: '#94a3b8', fontSize: '12px' }}>Total Balance</p>
+          <h2 style={{ fontSize: '28px', fontWeight: 'bold' }}>$0.00</h2>
         </div>
-        <div style={{ backgroundColor: '#0f172a', padding: '25px', borderRadius: '16px', border: '1px solid #1e293b' }}>
-          <p style={{ color: '#94a3b8', fontSize: '14px' }}>Active Investments</p>
-          <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginTop: '10px', color: '#10b981' }}>$0.00</h2>
-        </div>
-        <div style={{ backgroundColor: '#0f172a', padding: '25px', borderRadius: '16px', border: '1px solid #1e293b' }}>
-          <p style={{ color: '#94a3b8', fontSize: '14px' }}>Total Profit</p>
-          <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginTop: '10px', color: '#2563eb' }}>$0.00</h2>
+        <div style={{ backgroundColor: '#0f172a', padding: '20px', borderRadius: '12px', border: '1px solid #1e293b' }}>
+          <p style={{ color: '#94a3b8', fontSize: '12px' }}>Active Profits</p>
+          <h2 style={{ fontSize: '28px', fontWeight: 'bold', color: '#10b981' }}>$0.00</h2>
         </div>
       </div>
 
-      {/* Call to Action - Updated with Deposit Button */}
-      <div style={{ backgroundColor: '#1e293b', padding: '30px', borderRadius: '20px', textAlign: 'center' }}>
-        <h3 style={{ marginBottom: '20px' }}>Ready to grow your capital?</h3>
-        
-        <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="/dashboard/plans" style={{ textDecoration: 'none' }}>
-            <button style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>
-              Explore Investment Plans
-            </button>
-          </a>
+      {/* Main Actions */}
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '40px', flexWrap: 'wrap' }}>
+        <a href="/dashboard/deposit" style={{ textDecoration: 'none', flex: 1, minWidth: '140px' }}>
+          <button style={{ width: '100%', backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Deposit</button>
+        </a>
+        <a href="/dashboard/withdraw" style={{ textDecoration: 'none', flex: 1, minWidth: '140px' }}>
+          <button style={{ width: '100%', backgroundColor: '#1e293b', color: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #334155', fontWeight: 'bold', cursor: 'pointer' }}>Withdraw</button>
+        </a>
+        <a href="/dashboard/plans" style={{ textDecoration: 'none', flex: 1, minWidth: '140px' }}>
+          <button style={{ width: '100%', backgroundColor: '#0f172a', color: 'white', padding: '12px', borderRadius: '8px', border: '1px solid #334155', fontWeight: 'bold', cursor: 'pointer' }}>Plans</button>
+        </a>
+      </div>
 
-          <a href="/dashboard/deposit" style={{ textDecoration: 'none' }}>
-            <button style={{ backgroundColor: '#0f172a', color: 'white', padding: '12px 24px', borderRadius: '8px', border: '1px solid #334155', fontWeight: 'bold', cursor: 'pointer' }}>
-              Deposit Funds
-            </button>
-          </a>
+      {/* Transaction History Section */}
+      <div style={{ backgroundColor: '#0f172a', padding: '20px', borderRadius: '16px', border: '1px solid #1e293b' }}>
+        <h3 style={{ marginBottom: '20px', fontSize: '18px' }}>Recent Transactions</h3>
+        <div style={{ color: '#94a3b8', textAlign: 'center', padding: '40px 0', border: '1px dashed #1e293b', borderRadius: '8px' }}>
+          <p>No transactions yet.</p>
+          <p style={{ fontSize: '12px' }}>Your deposit and withdrawal history will appear here.</p>
         </div>
       </div>
     </div>
