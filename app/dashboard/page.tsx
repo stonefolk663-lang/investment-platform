@@ -12,11 +12,10 @@ export default function Dashboard() {
       setUser(user)
     }
     getUser()
-  }, [])
+  }, [supabase])
 
   return (
     <div style={{ backgroundColor: '#020617', color: 'white', minHeight: '100vh', padding: '20px' }}>
-      {/* Top Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', borderBottom: '1px solid #1e293b', paddingBottom: '20px' }}>
         <h1 style={{ fontSize: '24px', fontWeight: 'bold' }}>SpringWealth <span style={{ color: '#2563eb' }}>Portal</span></h1>
         <div style={{ textAlign: 'right' }}>
@@ -25,7 +24,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Money Stats Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '40px' }}>
         <div style={{ backgroundColor: '#0f172a', padding: '25px', borderRadius: '16px', border: '1px solid #1e293b' }}>
           <p style={{ color: '#94a3b8', fontSize: '14px' }}>Total Balance</p>
@@ -41,14 +39,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Call to Action */}
       <div style={{ backgroundColor: '#1e293b', padding: '30px', borderRadius: '20px', textAlign: 'center' }}>
         <h3>Ready to grow your capital?</h3>
-       <a href="/dashboard/plans" style={{ textDecoration: 'none' }}>
-  <button style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', fontWeight: 'bold', marginTop: '15px', cursor: 'pointer' }}>
-    Explore Investment Plans
-  </button>
-</a>
+        <a href="/dashboard/plans" style={{ textDecoration: 'none' }}>
+          <button style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px 24px', borderRadius: '8px', border: 'none', fontWeight: 'bold', marginTop: '15px', cursor: 'pointer' }}>
+            Explore Investment Plans
+          </button>
+        </a>
       </div>
     </div>
   )
