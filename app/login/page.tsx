@@ -1,59 +1,92 @@
 'use client'
-import React, { useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useState } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
-  const [loading, setLoading] = useState(false);
-  const supabase = createClientComponentClient();
+export default function AuthPage() {
+  const [isSignUp, setIsSignUp] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+  const supabase = createClientComponentClient()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
 
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      alert(error.message);
-      setLoading(false);
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: fullName } }
+      })
+      if (!error) alert('Check your email to confirm registration!')
+      else alert(error.message)
     } else {
-      window.location.href = '/dashboard';
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (!error) router.push('/dashboard')
+      else alert(error.message)
     }
-  };
+    setLoading(false)
+  }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white tracking-tight">SpringWealth</h1>
-          <p className="text-slate-400 mt-2">Secure Institutional Access</p>
-        </div>
+    <div style={{ backgroundColor: '#020617', color: 'white', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      <div style={{ width: '100%', maxWidth: '400px', backgroundColor: '#0f172a', padding: '40px', borderRadius: '24px', border: '1px solid #1e293b', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
+        
+        <h1 style={{ fontSize: '28px', fontWeight: 'bold', textAlign: 'center', marginBottom: '10px' }}>SpringWealth</h1>
+        <p style={{ color: '#94a3b8', textAlign: 'center', marginBottom: '30px', fontSize: '14px' }}>
+          {isSignUp ? 'Create your investor profile' : 'Secure Institutional Access'}
+        </p>
 
-        <form className="space-y-6" onSubmit={handleLogin}>
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
-            <input name="email" type="email" required className="w-full bg-slate-950 border border-slate-700 rounded-lg py-3 px-4 text-white outline-none" placeholder="name@company.com" />
-          </div>
-          <div>
-            <div className="flex justify-between mb-2">
-              <label className="text-sm font-medium text-slate-300">Password</label>
-            </div>
-            <input name="password" type="password" required className="w-full bg-slate-950 border border-slate-700 rounded-lg py-3 px-4 text-white outline-none" placeholder="••••••••" />
-          </div>
-          <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-lg disabled:opacity-50">
-            {loading ? 'Authenticating...' : 'Sign In'}
+        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {isSignUp && (
+            <input 
+              type="text" 
+              placeholder="Full Name" 
+              value={fullName} 
+              onChange={(e) => setFullName(e.target.value)}
+              style={{ padding: '12px', borderRadius: '8px', backgroundColor: '#1e293b', border: '1px solid #334155', color: 'white' }} 
+              required 
+            />
+          )}
+          <input 
+            type="email" 
+            placeholder="Email Address" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ padding: '12px', borderRadius: '8px', backgroundColor: '#1e293b', border: '1px solid #334155', color: 'white' }} 
+            required 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ padding: '12px', borderRadius: '8px', backgroundColor: '#1e293b', border: '1px solid #334155', color: 'white' }} 
+            required 
+          />
+          <button 
+            type="submit" 
+            disabled={loading}
+            style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' }}
+          >
+            {loading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Sign In')}
           </button>
         </form>
-        <p className="text-center text-slate-500 mt-8 text-sm">
-          New to SpringWealth? <a href="/signup" className="text-blue-400 font-medium hover:underline">Create an account</a>
+
+        <p style={{ textAlign: 'center', marginTop: '25px', fontSize: '14px', color: '#94a3b8' }}>
+          {isSignUp ? 'Already have an account?' : 'New to SpringWealth?'} {' '}
+          <span 
+            onClick={() => setIsSignUp(!isSignUp)} 
+            style={{ color: '#2563eb', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}
+          >
+            {isSignUp ? 'Sign In' : 'Create an account'}
+          </span>
         </p>
       </div>
     </div>
-  );
+  )
 }
