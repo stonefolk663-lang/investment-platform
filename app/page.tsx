@@ -11,7 +11,7 @@ export default function LandingPage() {
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
           <a href="#about" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '14px' }}>About</a>
           <a href="/login" style={{ color: 'white', textDecoration: 'none', fontSize: '14px' }}>Login</a>
-          <a href="/login" style={{ backgroundColor: '#2563eb', padding: '8px 20px', borderRadius: '6px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}>Sign Up</a>
+          <a href="/login" style={{ backgroundColor: '#2563eb', padding: '8px 20px', borderRadius: '6px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}>Get Started</a>
         </div>
       </nav>
 
@@ -22,12 +22,13 @@ export default function LandingPage() {
           Join thousands of investors using SpringWealth to secure weekly ROI through automated crypto and gem-market arbitrage.
         </p>
         <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
-           <a href="/dashboard/plans" style={{ backgroundColor: '#2563eb', padding: '15px 30px', borderRadius: '8px', color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>View Plans</a>
+           {/* Redirecting to login to ensure they sign up first */}
+           <a href="/login" style={{ backgroundColor: '#2563eb', padding: '15px 30px', borderRadius: '8px', color: 'white', textDecoration: 'none', fontWeight: 'bold' }}>View Investment Plans</a>
            <a href="#market" style={{ backgroundColor: '#1e293b', padding: '15px 30px', borderRadius: '8px', color: 'white', textDecoration: 'none', fontWeight: 'bold', border: '1px solid #334155' }}>Live Market</a>
         </div>
       </header>
 
-      {/* Live Market Widget Placeholder */}
+      {/* Market Ticker Section */}
       <section id="market" style={{ padding: '40px 5%', backgroundColor: '#0f172a' }}>
         <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: '14px', marginBottom: '20px' }}>LIVE MARKET UPDATES (USDT PAIRS)</div>
         <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', gap: '20px' }}>
@@ -46,28 +47,28 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* About & Plans Explanation */}
+      {/* About Section */}
       <section id="about" style={{ padding: '80px 5%', maxWidth: '1000px', margin: '0 auto' }}>
         <h3 style={{ fontSize: '32px', textAlign: 'center', marginBottom: '50px' }}>How it Works</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
           <div>
-            <h4 style={{ color: '#2563eb', marginBottom: '15px' }}>1. Choose a Tier</h4>
-            <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>From our Starter Tier (5% weekly) to our Elite Tier (25% weekly), we have a strategy for every level of capital.</p>
+            <h4 style={{ color: '#2563eb', marginBottom: '15px' }}>1. Create an Account</h4>
+            <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>Sign up in seconds to access our exclusive investment tiers and dashboard.</p>
           </div>
           <div>
             <h4 style={{ color: '#2563eb', marginBottom: '15px' }}>2. Deposit USDT</h4>
-            <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>Securely fund your account via the TRC20 network. Your funds are protected by our manual verification protocol.</p>
+            <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>Securely fund your wallet via TRC20. We manually verify every deposit for maximum security.</p>
           </div>
           <div>
-            <h4 style={{ color: '#2563eb', marginBottom: '15px' }}>3. Earn & Withdraw</h4>
-            <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>Track your ROI daily on your portal and request a withdrawal to your personal wallet anytime.</p>
+            <h4 style={{ color: '#2563eb', marginBottom: '15px' }}>3. Collect Weekly ROI</h4>
+            <p style={{ color: '#94a3b8', lineHeight: '1.6' }}>Watch your capital grow with up to 25% weekly returns, withdrawable to your wallet at any time.</p>
           </div>
         </div>
       </section>
 
-      {/* Footer / Contact */}
+      {/* Footer */}
       <footer style={{ padding: '40px 5%', textAlign: 'center', borderTop: '1px solid #1e293b', color: '#64748b', fontSize: '14px' }}>
-        <p>© 2026 SpringWealth Investment Group. Contact: support@springwealth.com</p>
+        <p>© 2026 SpringWealth. Professional Wealth Management.</p>
       </footer>
     </div>
   );
