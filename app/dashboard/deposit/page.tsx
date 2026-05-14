@@ -1,8 +1,39 @@
 'use client'
 import React, { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
 
 export default function DepositPage() {
   const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
+  const supabase = createClientComponentClient();
+  const router = useRouter();
+
+  const handleDeposit = async () => {
+    if (!amount || parseFloat(amount) <= 0) return alert("Please enter a valid amount");
+    
+    setLoading(true);
+    const { data: { user } } = await supabase.auth.getUser();
+
+    const { error } = await supabase
+      .from('transactions')
+      .insert([
+        { 
+          user_id: user?.id, 
+          amount: parseFloat(amount), 
+          type: 'deposit', 
+          status: 'pending' 
+        }
+      ]);
+
+    if (!error) {
+      alert('Deposit notification sent! Please wait for admin verification.');
+      router.push('/dashboard');
+    } else {
+      alert('Error: ' + error.message);
+    }
+    setLoading(false);
+  };
 
   return (
     <div style={{ backgroundColor: '#020617', color: 'white', minHeight: '100vh', padding: '20px' }}>
@@ -25,8 +56,12 @@ export default function DepositPage() {
           </code>
         </div>
 
-        <button style={{ width: '100%', padding: '14px', borderRadius: '8px', backgroundColor: '#2563eb', color: 'white', fontWeight: 'bold', marginTop: '20px', border: 'none', cursor: 'pointer' }}>
-          I Have Made the Transfer
+        <button 
+          onClick={handleDeposit}
+          disabled={loading}
+          style={{ width: '100%', padding: '14px', borderRadius: '8px', backgroundColor: '#2563eb', color: 'white', fontWeight: 'bold', marginTop: '20px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
+        >
+          {loading ? 'Processing...' : 'I Have Made the Transfer'}
         </button>
       </div>
     </div>
