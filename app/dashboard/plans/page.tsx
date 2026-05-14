@@ -68,18 +68,21 @@ export default function InvestmentPlans() {
                 <span style={{ color: 'white' }}>{plan.duration}</span>
               </div>
 
-              <button style={{ 
-                marginTop: 'auto',
-                backgroundColor: plan.popular ? plan.color : '#1e293b', 
-                color: 'white', 
-                padding: '14px', 
-                borderRadius: '12px', 
-                border: 'none', 
-                fontWeight: 'bold', 
-                cursor: 'pointer' 
-              }}>
-                Invest Now
-              </button>
+              {/* Added link to redirect to the deposit page */}
+              <a href="/dashboard/deposit" style={{ textDecoration: 'none', marginTop: 'auto' }}>
+                <button style={{ 
+                  width: '100%',
+                  backgroundColor: plan.popular ? plan.color : '#1e293b', 
+                  color: 'white', 
+                  padding: '14px', 
+                  borderRadius: '12px', 
+                  border: 'none', 
+                  fontWeight: 'bold', 
+                  cursor: 'pointer' 
+                }}>
+                  Invest Now
+                </button>
+              </a>
             </div>
           ))}
         </div>
