@@ -1,16 +1,26 @@
 'use client'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function LandingPage() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Responsive breakpoints
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 968);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div style={{ backgroundColor: '#ffffff', color: '#1e293b', minHeight: '100vh', fontFamily: 'sans-serif', scrollBehavior: 'smooth' }}>
+    <div style={{ backgroundColor: '#ffffff', color: '#1e293b', minHeight: '100vh', fontFamily: '"Inter", sans-serif', scrollBehavior: 'smooth' }}>
       
-      {/* Navigation Bar - Clean & Sticky */}
+      {/* Navigation Bar */}
       <nav style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        padding: '15px 8%', 
+        padding: isMobile ? '15px 5%' : '20px 8%', 
         backgroundColor: 'rgba(255, 255, 255, 0.95)', 
         backdropFilter: 'blur(10px)',
         borderBottom: '1px solid #e2e8f0', 
@@ -18,137 +28,206 @@ export default function LandingPage() {
         top: 0, 
         zIndex: 100 
       }}>
-        <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#2563eb', letterSpacing: '-1px' }}>SpringWealth</h1>
-        <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
-          <a href="#about" style={{ color: '#64748b', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>About</a>
-          <a href="#market" style={{ color: '#64748b', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>Market</a>
+        <h1 style={{ fontSize: isMobile ? '22px' : '26px', fontWeight: '900', color: '#2563eb', letterSpacing: '-1px', margin: 0 }}>SpringWealth</h1>
+        <div style={{ display: 'flex', gap: isMobile ? '15px' : '30px', alignItems: 'center' }}>
+          {!isMobile && <a href="#about" style={{ color: '#64748b', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>About</a>}
+          {!isMobile && <a href="#market" style={{ color: '#64748b', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>Market</a>}
+          {!isMobile && <a href="#reviews" style={{ color: '#64748b', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>Reviews</a>}
           <a href="/login" style={{ color: '#1e293b', textDecoration: 'none', fontSize: '14px', fontWeight: '600' }}>Login</a>
-          <a href="/login" style={{ backgroundColor: '#2563eb', padding: '12px 24px', borderRadius: '10px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px', boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)' }}>Get Started</a>
+          <a href="/login" style={{ backgroundColor: '#1e293b', padding: isMobile ? '10px 18px' : '12px 24px', borderRadius: '8px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}>Get Started</a>
         </div>
       </nav>
 
-      {/* Hero Section with Wealth Background Image */}
+      {/* Hero Section */}
       <header style={{ 
         position: 'relative',
-        padding: '120px 8%', 
-        textAlign: 'center',
-        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.95)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000")',
+        padding: isMobile ? '80px 5% 60px' : '140px 8%', 
+        backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.95) 40%, rgba(255, 255, 255, 0.4)), url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed'
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
       }}>
-        <h2 style={{ fontSize: '64px', fontWeight: '900', color: '#0f172a', marginBottom: '24px', lineHeight: '1.1', letterSpacing: '-2px' }}>
-          Intelligent Wealth <br/><span style={{ color: '#2563eb' }}>Management</span>
-        </h2>
-        <p style={{ color: '#475569', maxWidth: '700px', margin: '0 auto 40px', fontSize: '20px', lineHeight: '1.6' }}>
-          Experience a new standard of financial growth. We combine automated technology with global market expertise to deliver consistent performance.
-        </p>
-        <div style={{ display: 'flex', gap: '15px', justifyContent: 'center' }}>
-           <a href="/login" style={{ backgroundColor: '#2563eb', padding: '18px 40px', borderRadius: '12px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '17px', boxShadow: '0 20px 25px -5px rgba(37, 99, 235, 0.3)' }}>Start Investing</a>
-           <a href="#about" style={{ backgroundColor: '#ffffff', padding: '18px 40px', borderRadius: '12px', color: '#1e293b', textDecoration: 'none', fontWeight: 'bold', fontSize: '17px', border: '1px solid #e2e8f0' }}>Learn More</a>
+        <div style={{ maxWidth: isMobile ? '100%' : '650px', textAlign: isMobile ? 'center' : 'left' }}>
+          <h2 style={{ fontSize: isMobile ? '38px' : '56px', fontWeight: '900', color: '#0f172a', marginBottom: '20px', lineHeight: '1.15', letterSpacing: '-1.5px' }}>
+            Trade a range of instruments from a <span style={{ color: '#2563eb' }}>single account</span>
+          </h2>
+          <p style={{ color: '#475569', margin: '0 0 40px 0', fontSize: isMobile ? '16px' : '20px', lineHeight: '1.6', fontWeight: '400' }}>
+            Expand your market reach, diversify your portfolio, and utilize our tools to manage your risk. Secure consistent performance through automated crypto and gemstone arbitrage.
+          </p>
+          <div style={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start' }}>
+             <a href="/login" style={{ backgroundColor: '#2563eb', padding: '16px 36px', borderRadius: '8px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '15px', letterSpacing: '1px', boxShadow: '0 10px 20px -5px rgba(37, 99, 235, 0.4)' }}>START TRADING</a>
+          </div>
         </div>
       </header>
 
-      {/* Live Market Section - Clean Glass Look */}
-      <section id="market" style={{ padding: '60px 8%', backgroundColor: '#f8fafc' }}>
-        <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: '12px', marginBottom: '30px', letterSpacing: '3px', fontWeight: 'bold', textTransform: 'uppercase' }}>Real-Time Global Indices</div>
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '20px' }}>
+      {/* Metrics Strip */}
+      <section style={{ backgroundColor: '#f8fafc', padding: '40px 5%', borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', 
+          gap: isMobile ? '20px' : '30px', 
+          maxWidth: '1200px', 
+          margin: '0 auto' 
+        }}>
+          {[
+            { metric: 'Tight spreads', value: 'from 0.0 pips', icon: '⚡' },
+            { metric: '$100 minimum', value: 'deposit', icon: '💵' },
+            { metric: 'Fast execution', value: 'speeds', icon: '🚀' },
+            { metric: 'Trader-centric', value: 'technology', icon: '📊' }
+          ].map((item, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '10px' }}>
+              <div style={{ fontSize: '28px' }}>{item.icon}</div>
+              <div>
+                <p style={{ margin: 0, fontWeight: '700', fontSize: '15px', color: '#0f172a', lineHeight: '1.3' }}>{item.metric}</p>
+                <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>{item.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Live Assets Showcase */}
+      <section id="market" style={{ padding: isMobile ? '60px 5%' : '80px 8%' }}>
+        <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: '11px', marginBottom: '35px', letterSpacing: '3px', fontWeight: '800' }}>LIVE MARKETS (USDT PAIRS)</div>
+        <div style={{ display: 'flex', gap: '20px', overflowX: 'auto', paddingBottom: '15px', justifyContent: isMobile ? 'flex-start' : 'center' }}>
           {[
             { pair: 'BTC/USDT', price: '$64,230.12', up: true },
             { pair: 'ETH/USDT', price: '$3,450.45', up: true },
             { pair: 'SOL/USDT', price: '$145.20', up: false },
           ].map((coin, i) => (
-            <div key={i} style={{ padding: '24px 40px', borderRadius: '20px', backgroundColor: 'white', border: '1px solid #e2e8f0', minWidth: '220px', textAlign: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
-              <p style={{ color: '#64748b', fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>{coin.pair}</p>
-              <p style={{ fontWeight: '800', fontSize: '20px', color: coin.up ? '#10b981' : '#ef4444' }}>
-                {coin.price} <span style={{fontSize: '14px'}}>{coin.up ? '▲' : '▼'}</span>
+            <div key={i} style={{ padding: '20px 30px', borderRadius: '12px', backgroundColor: 'white', border: '1px solid #e2e8f0', minWidth: '200px', textAlign: 'center', flexShrink: 0 }}>
+              <p style={{ color: '#64748b', fontSize: '13px', fontWeight: '600', margin: '0 0 6px 0' }}>{coin.pair}</p>
+              <p style={{ fontWeight: '800', fontSize: '18px', margin: 0, color: coin.up ? '#10b981' : '#ef4444' }}>
+                {coin.price} {coin.up ? '▲' : '▼'}
               </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Mission Section with Refined Cards */}
-      <section id="about" style={{ padding: '100px 8%', maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-          <h3 style={{ fontSize: '42px', fontWeight: '900', color: '#0f172a', marginBottom: '15px' }}>Built for Global Markets</h3>
-          <p style={{ color: '#64748b', fontSize: '18px' }}>Strategic investment operations spanning Nigeria, Australia, and the US.</p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
-          
-          {/* Card 1 */}
-          <div style={{ backgroundColor: 'white', borderRadius: '32px', overflow: 'hidden', border: '1px solid #f1f5f9', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
-            <div style={{ padding: '40px' }}>
-              <div style={{ width: '50px', height: '50px', backgroundColor: '#eff6ff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#2563eb', fontSize: '24px', marginBottom: '25px' }}>🌍</div>
-              <h4 style={{ color: '#0f172a', marginBottom: '15px', fontSize: '24px', fontWeight: 'bold' }}>Global Arbitrage</h4>
-              <p style={{ color: '#64748b', lineHeight: '1.8', fontSize: '16px' }}>
-                Leveraging market price differences across continents to ensure optimized capital entry and exit.
-              </p>
+      {/* Showcase Section */}
+      <section id="about" style={{ padding: isMobile ? '60px 5%' : '100px 8%', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? '40px' : '80px', alignItems: 'center' }}>
+          <div style={{ flex: 1, width: '100%' }}>
+            <img 
+              src="https://images.unsplash.com/photo-1611974714658-75d4f1ad33da?auto=format&fit=crop&q=80&w=800" 
+              alt="Trading Environment" 
+              style={{ width: '100%', height: isMobile ? '280px' : '450px', objectFit: 'cover', borderRadius: '24px', boxShadow: '0 20px 40px -15px rgba(0,0,0,0.1)' }}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h2 style={{ fontSize: isMobile ? '32px' : '44px', fontWeight: '900', color: '#0f172a', margin: '0 0 20px 0', lineHeight: '1.2' }}>Our trading structures</h2>
+            <h4 style={{ color: '#2563eb', fontSize: '18px', fontWeight: '600', margin: '0 0 25px 0' }}>Technology built for diverse investing styles and all experience levels.</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {[
+                { name: 'Global Arbitrage Operations', desc: 'Capturing real-time pricing inefficiencies across digital and raw gemstone environments.' },
+                { name: 'Secured Capital Thresholds', desc: 'Protected processing routes through cold wallets and fully verified TRC20 networks.' },
+                { name: 'Transparent Ledgering', desc: 'Access granular weekly return distributions directly inside your unique tracking dashboard.' }
+              ].map((plat, idx) => (
+                <div key={idx} style={{ borderLeft: '3px solid #e2e8f0', paddingLeft: '20px' }}>
+                  <p style={{ margin: '0 0 5px 0', fontWeight: '700', color: '#0f172a', fontSize: '16px' }}>{plat.name}</p>
+                  <p style={{ margin: 0, color: '#64748b', fontSize: '14px', lineHeight: '1.5' }}>{plat.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
-
-          {/* Card 2 */}
-          <div style={{ backgroundColor: 'white', borderRadius: '32px', overflow: 'hidden', border: '1px solid #f1f5f9', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
-            <div style={{ padding: '40px' }}>
-              <div style={{ width: '50px', height: '50px', backgroundColor: '#f0fdf4', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', fontSize: '24px', marginBottom: '25px' }}>🛡️</div>
-              <h4 style={{ color: '#0f172a', marginBottom: '15px', fontSize: '24px', fontWeight: 'bold' }}>Institutional Security</h4>
-              <p style={{ color: '#64748b', lineHeight: '1.8', fontSize: '16px' }}>
-                Your portfolio is protected by cold-storage protocols and encrypted asset management systems.
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div style={{ backgroundColor: 'white', borderRadius: '32px', overflow: 'hidden', border: '1px solid #f1f5f9', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
-            <div style={{ padding: '40px' }}>
-              <div style={{ width: '50px', height: '50px', backgroundColor: '#fff7ed', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', fontSize: '24px', marginBottom: '25px' }}>📈</div>
-              <h4 style={{ color: '#0f172a', marginBottom: '15px', fontSize: '24px', fontWeight: 'bold' }}>High Performance</h4>
-              <p style={{ color: '#64748b', lineHeight: '1.8', fontSize: '16px' }}>
-                Automated weekly returns designed for the modern investor who values consistency and transparency.
-              </p>
-            </div>
-          </div>
-
         </div>
       </section>
 
-      {/* Contact Section - Bright & Professional */}
-      <section id="contact" style={{ padding: '100px 8%', backgroundColor: '#f8fafc' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '80px', alignItems: 'center' }}>
-          <div>
-            <h3 style={{ fontSize: '42px', fontWeight: '900', color: '#0f172a', marginBottom: '20px' }}>Let's talk about your future.</h3>
-            <p style={{ color: '#64748b', fontSize: '18px', marginBottom: '40px' }}>Whether you're starting small or scaling a portfolio, our team is here to assist.</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ color: '#2563eb', fontWeight: 'bold' }}>Email:</div>
-                <div style={{ fontWeight: '600' }}>support@springwealth.com</div>
+      {/* Onboarding Flow Section */}
+      <section style={{ backgroundColor: '#0f172a', color: 'white', padding: isMobile ? '60px 5%' : '100px 8%', position: 'relative' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: isMobile ? '32px' : '44px', fontWeight: '900', margin: '0 0 15px 0', letterSpacing: '-1px' }}>How to get started with SpringWealth</h2>
+          <p style={{ color: '#94a3b8', fontSize: '16px', margin: '0 0 60px 0' }}>Open your active production dashboard in minutes</p>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: '30px', marginBottom: '50px' }}>
+            {[
+              { num: '01', step: 'Register', body: 'Choose an investment structure and complete our fast and secure verification profile.' },
+              { num: '02', step: 'Fund', body: 'Fund your strategic portfolio using a wide range of secure processing gateways.' },
+              { num: '03', step: 'Trade', body: 'Monitor premium performance distributions with clear automated reports.' }
+            ].map((card, i) => (
+              <div key={i} style={{ backgroundColor: '#1e293b', padding: '40px 30px', borderRadius: '16px', textAlign: 'left', border: '1px solid #334155' }}>
+                <span style={{ fontSize: '14px', fontWeight: 'bold', color: '#2563eb', backgroundColor: '#eff6ff', padding: '4px 10px', borderRadius: '6px' }}>{card.num}</span>
+                <h3 style={{ fontSize: '22px', fontWeight: '700', margin: '20px 0 10px 0' }}>{card.step}</h3>
+                <p style={{ color: '#94a3b8', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>{card.body}</p>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                <div style={{ color: '#2563eb', fontWeight: 'bold' }}>Support:</div>
-                <div style={{ fontWeight: '600' }}>24/7 Global Live Chat</div>
+            ))}
+          </div>
+          <a href="/login" style={{ display: 'inline-block', backgroundColor: '#2563eb', padding: '16px 40px', borderRadius: '8px', color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '15px' }}>START TRADING</a>
+        </div>
+      </section>
+
+      {/* NEW: Reviews and Trust Section */}
+      <section id="reviews" style={{ padding: isMobile ? '60px 5%' : '100px 8%', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+          <h2 style={{ fontSize: isMobile ? '32px' : '44px', fontWeight: '900', color: '#0f172a', margin: '0 0 10px 0', letterSpacing: '-1px' }}>Trusted by Investors Worldwide</h2>
+          <p style={{ color: '#64748b', fontSize: '16px', margin: 0 }}>See what our community members say about their portfolio performance.</p>
+        </div>
+
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', 
+          gap: '30px' 
+        }}>
+          {[
+            { name: 'Marcus K.', location: 'Queensland, AU', rating: '⭐⭐⭐⭐⭐', review: 'The weekly arbitrage payouts are completely automated. I started with a modest balance to test the TRC20 speed, and withdrawals process smoothly every time.', verified: true },
+            { name: 'Chidi O.', location: 'Buffalo, NY', rating: '⭐⭐⭐⭐⭐', review: 'What sets them apart is the transparency. Having a dashboard that clearly illustrates the arbitrage tracking helps me feel fully secure with my capital commitment.', verified: true },
+            { name: 'Sarah L.', location: 'Alabama, USA', rating: '⭐⭐⭐⭐⭐', review: 'Extremely clean interface on mobile, making it very straightforward to keep track of performance while on the move. Highly recommend SpringWealth.', verified: true }
+          ].map((user, idx) => (
+            <div key={idx} style={{ 
+              backgroundColor: '#ffffff', 
+              padding: '30px', 
+              borderRadius: '16px', 
+              border: '1px solid #e2e8f0',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.02)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}>
+              <div>
+                <div style={{ color: '#f59e0b', fontSize: '14px', marginBottom: '15px' }}>{user.rating}</div>
+                <p style={{ color: '#475569', fontSize: '15px', lineHeight: '1.6', fontStyle: 'italic', margin: '0 0 20px 0' }}>"{user.review}"</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: '15px' }}>
+                <div>
+                  <h4 style={{ margin: '0 0 2px 0', fontSize: '15px', fontWeight: '700', color: '#0f172a' }}>{user.name}</h4>
+                  <p style={{ margin: 0, fontSize: '13px', color: '#94a3b8' }}>{user.location}</p>
+                </div>
+                {user.verified && (
+                  <span style={{ fontSize: '12px', fontWeight: '600', color: '#10b981', backgroundColor: '#ecfdf5', padding: '4px 8px', borderRadius: '4px' }}>✓ Verified</span>
+                )}
               </div>
             </div>
-          </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Clean Contact Form */}
+      <section id="contact" style={{ padding: isMobile ? '60px 5%' : '100px 8%', backgroundColor: '#f8fafc' }}>
+        <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: isMobile ? '32px' : '40px', fontWeight: '900', color: '#0f172a', margin: '0 0 15px 0' }}>Connect with Support</h2>
+          <p style={{ color: '#64748b', fontSize: '16px', margin: '0 0 40px 0' }}>Our global desks typical respond within 24 operational hours.</p>
           
-          <form style={{ display: 'flex', flexDirection: 'column', gap: '15px', backgroundColor: 'white', padding: '40px', borderRadius: '24px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
-            <input type="text" placeholder="Full Name" style={{ padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', color: '#1e293b', outline: 'none', backgroundColor: '#f8fafc' }} required />
-            <input type="email" placeholder="Email Address" style={{ padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', color: '#1e293b', outline: 'none', backgroundColor: '#f8fafc' }} required />
-            <textarea placeholder="Tell us about your goals..." rows={4} style={{ padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0', color: '#1e293b', outline: 'none', resize: 'none', backgroundColor: '#f8fafc' }} required />
-            <button type="submit" style={{ backgroundColor: '#2563eb', color: 'white', padding: '18px', borderRadius: '12px', border: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px', boxShadow: '0 10px 15px -3px rgba(37, 99, 235, 0.3)' }}>Send Inquiry</button>
+          <form style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <input type="text" placeholder="Full Name" style={{ padding: '16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px' }} required />
+            <input type="email" placeholder="Email Address" style={{ padding: '16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px' }} required />
+            <textarea placeholder="How can our desk assist your portfolio?" rows={4} style={{ padding: '16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', resize: 'none', fontSize: '15px' }} required />
+            <button type="submit" style={{ backgroundColor: '#0f172a', color: 'white', padding: '16px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer', fontSize: '16px' }}>Send Message</button>
           </form>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer style={{ padding: '80px 8% 40px', textAlign: 'center', backgroundColor: 'white', color: '#94a3b8', fontSize: '14px' }}>
-        <div style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center', gap: '40px' }}>
-          <a href="#about" style={{ color: '#64748b', textDecoration: 'none', fontWeight: '600' }}>About</a>
-          <a href="#market" style={{ color: '#64748b', textDecoration: 'none', fontWeight: '600' }}>Live Market</a>
-          <a href="/login" style={{ color: '#64748b', textDecoration: 'none', fontWeight: '600' }}>Legal & Privacy</a>
+      {/* Responsive Footer */}
+      <footer style={{ padding: '60px 5%', textAlign: 'center', borderTop: '1px solid #e2e8f0', color: '#94a3b8', fontSize: '14px' }}>
+        <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'center', gap: isMobile ? '20px' : '40px', flexWrap: 'wrap' }}>
+          <a href="#about" style={{ color: '#64748b', textDecoration: 'none', fontWeight: '500' }}>About Group</a>
+          <a href="#market" style={{ color: '#64748b', textDecoration: 'none', fontWeight: '500' }}>Asset Feed</a>
+          <a href="#contact" style={{ color: '#64748b', textDecoration: 'none', fontWeight: '500' }}>Support Desk</a>
         </div>
-        <p style={{ fontWeight: '500' }}>© 2026 SpringWealth Investment Group. All rights reserved.</p>
+        <p style={{ margin: 0 }}>© 2026 SpringWealth Investment Group. All structural rights reserved.</p>
       </footer>
+
     </div>
   );
 }
