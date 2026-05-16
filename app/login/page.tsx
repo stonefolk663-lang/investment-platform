@@ -1,42 +1,55 @@
 'use client'
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Injects the Next.js router tool
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'; // Import Supabase Client
+import { useRouter } from 'next/navigation'; 
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'; 
 
 export default function SignIn() {
-  const router = useRouter(); // Initializes the router redirect feature
-  const supabase = createClientComponentClient(); // Initialize Supabase connection
+  const router = useRouter(); 
+  const supabase = createClientComponentClient(); 
   
+  // Form States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
-  const [loading, setLoading] = useState(false); // To prevent double-clicking
+  
+  // Loading States to prevent spam clicking
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
-  const handleSignIn = (e: React.FormEvent) => {
+  // 1. Handle Secure User Sign-In
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Authenticating:', { email, password });
-    
-    // This line pushes the user straight to your dashboard page upon clicking
-    router.push('/dashboard'); 
+    setLoginLoading(true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    setLoginLoading(false);
+
+    if (error) {
+      alert(`Login Error: ${error.message}`);
+    } else if (data?.user) {
+      // Moves user securely straight into the dashboard layout
+      router.push('/dashboard'); 
+    }
   };
 
+  // 2. Handle Password Recovery Request
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    console.log('Requesting recovery from Supabase for:', forgotEmail);
+    setResetLoading(true);
     
-    // This is the active trigger engine that hooks up to your new Resend SMTP settings!
     const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
       redirectTo: 'https://investment-platform-dont.vercel.app/dashboard/update-password',
     });
 
-    setLoading(false);
+    setResetLoading(false);
 
     if (error) {
-      console.error("Supabase Reset Error:", error.message);
-      alert(`Error: ${error.message}`);
+      alert(`Error sending recovery email: ${error.message}`);
     } else {
       alert(`Reset link safely dispatched to ${forgotEmail}. Please check your inbox and spam folder.`);
       setIsForgotModalOpen(false);
@@ -57,19 +70,44 @@ export default function SignIn() {
         <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Email Address</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              placeholder="name@example.com" 
+              style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} 
+              required 
+            />
           </div>
 
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
               <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>Password</label>
-              <button type="button" onClick={() => setIsForgotModalOpen(true)} style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '13px', fontWeight: '600', cursor: 'pointer', padding: 0 }}>Forgot password?</button>
+              <button 
+                type="button" 
+                onClick={() => setIsForgotModalOpen(true)} 
+                style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '13px', fontWeight: '600', cursor: 'pointer', padding: 0 }}
+              >
+                Forgot password?
+              </button>
             </div>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
+            <input 
+              type="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              placeholder="••••••••" 
+              style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} 
+              required 
+            />
           </div>
 
-          {/* Trigger button that now successfully routes to dashboard */}
-          <button type="submit" style={{ backgroundColor: '#1e293b', color: 'white', padding: '14px', borderRadius: '8px', border: 'none', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginTop: '10px', width: '100%' }}>Sign In</button>
+          <button 
+            type="submit" 
+            disabled={loginLoading}
+            style={{ backgroundColor: '#1e293b', color: 'white', padding: '14px', borderRadius: '8px', border: 'none', fontWeight: 'bold', fontSize: '15px', cursor: loginLoading ? 'not-allowed' : 'pointer', marginTop: '10px', width: '100%', opacity: loginLoading ? 0.7 : 1 }}
+          >
+            {loginLoading ? 'Authenticating...' : 'Sign In'}
+          </button>
         </form>
 
         <p style={{ textAlign: 'center', color: '#64748b', fontSize: '14px', marginTop: '30px', margin: '30px 0 0 0' }}>
@@ -85,11 +123,28 @@ export default function SignIn() {
             <p style={{ color: '#64748b', fontSize: '14px', lineHeight: '1.5', margin: '0 0 20px 0' }}>Enter your verified email. We will send you an exclusive link to restore your dashboard credentials.</p>
             
             <form onSubmit={handleForgotPassword} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <input type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} placeholder="name@example.com" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
+              <input 
+                type="email" 
+                value={forgotEmail} 
+                onChange={(e) => setForgotEmail(e.target.value)} 
+                placeholder="name@example.com" 
+                style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} 
+                required 
+              />
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <button type="button" onClick={() => setIsForgotModalOpen(false)} style={{ flex: 1, backgroundColor: '#f1f5f9', color: '#64748b', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" disabled={loading} style={{ flex: 1, backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
-                  {loading ? 'Sending...' : 'Send Link'}
+                <button 
+                  type="button" 
+                  onClick={() => setIsForgotModalOpen(false)} 
+                  style={{ flex: 1, backgroundColor: '#f1f5f9', color: '#64748b', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={resetLoading}
+                  style={{ flex: 1, backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: resetLoading ? 'not-allowed' : 'pointer', opacity: resetLoading ? 0.7 : 1 }}
+                >
+                  {resetLoading ? 'Sending...' : 'Send Link'}
                 </button>
               </div>
             </form>
