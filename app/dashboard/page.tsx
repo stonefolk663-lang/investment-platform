@@ -9,13 +9,12 @@ export default function Dashboard() {
   const supabase = createClientComponentClient()
 
   useEffect(() => {
+    // 1. Get User Data and Transactions
     const getData = async () => {
-      // 1. Get User
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
 
       if (user) {
-        // 2. Get Transactions
         const { data: txData } = await supabase
           .from('transactions')
           .select('*')
@@ -23,7 +22,6 @@ export default function Dashboard() {
         
         setTransactions(txData || [])
 
-        // 3. Calculate Balance (Only Completed Deposits)
         const total = txData
           ?.filter(tx => tx.status === 'completed' && tx.type === 'deposit')
           .reduce((sum, tx) => sum + tx.amount, 0)
@@ -32,17 +30,35 @@ export default function Dashboard() {
       }
     }
     getData()
+
+    // 2. Inject Tawk.to Live Chat Widget (Using your real keys)
+    var Tawk_API = (window as any).Tawk_API || {}, Tawk_LoadStart = new Date();
+    const s1 = document.createElement("script");
+    const s0 = document.getElementsByTagName("script")[0];
+    s1.async = true;
+    s1.src = 'https://embed.tawk.to/6a088fec963adc1c27641aaf/1joon4dqc';
+    s1.charset = 'UTF-8';
+    s1.setAttribute('crossorigin', '*');
+    if (s0 && s0.parentNode) {
+      s0.parentNode.insertBefore(s1, s0);
+    } else {
+      document.head.appendChild(s1);
+    }
+
+    // Cleanup script when component unmounts to prevent duplicated widgets
+    return () => {
+      s1.remove();
+    }
   }, [supabase])
 
   const fullName = user?.user_metadata?.full_name || 'Investor'
   const initial = fullName.charAt(0).toUpperCase()
 
-  // 1. Gamification Goal Metrics (Targeting a $10,000 Milestone)
+  // Gamification Goal Metrics (Targeting a $10,000 Milestone)
   const targetMilestone = 10000;
   const progressPercentage = Math.min((balance / targetMilestone) * 100, 100);
 
-  // 2. Portfolio Performance Weather Rules
-  // Dynamic status based on user account history balance state
+  // Portfolio Performance Weather Rules
   const isAccountActive = balance > 0;
   const portfolioWeather = isAccountActive ? '☀️ Clear & Bullish' : '🌤️ Awaiting Funding';
   const statusBadgeColor = isAccountActive ? '#16a34a' : '#475569';
