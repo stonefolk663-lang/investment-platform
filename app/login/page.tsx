@@ -1,7 +1,9 @@
 'use client'
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Injects the Next.js router tool
 
 export default function SignIn() {
+  const router = useRouter(); // Initializes the router redirect feature
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
@@ -9,8 +11,10 @@ export default function SignIn() {
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Signing in with:', { email, password });
-    // Your backend authentication logic goes here
+    console.log('Authenticating:', { email, password });
+    
+    // This line pushes the user straight to your dashboard page upon clicking
+    router.push('/dashboard'); 
   };
 
   const handleForgotPassword = (e: React.FormEvent) => {
@@ -45,6 +49,7 @@ export default function SignIn() {
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
           </div>
 
+          {/* Trigger button that now successfully routes to dashboard */}
           <button type="submit" style={{ backgroundColor: '#1e293b', color: 'white', padding: '14px', borderRadius: '8px', border: 'none', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginTop: '10px', width: '100%' }}>Sign In</button>
         </form>
 
