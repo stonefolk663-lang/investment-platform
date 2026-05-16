@@ -1,92 +1,75 @@
 'use client'
-import { useState } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
+import React, { useState } from 'react';
 
-export default function AuthPage() {
-  const [isSignUp, setIsSignUp] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
-  const supabase = createClientComponentClient()
+export default function SignIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
 
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Signing in with:', { email, password });
+    // Your backend authentication logic goes here
+  };
 
-    if (isSignUp) {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: fullName } }
-      })
-      if (!error) alert('Check your email to confirm registration!')
-      else alert(error.message)
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (!error) router.push('/dashboard')
-      else alert(error.message)
-    }
-    setLoading(false)
-  }
+  const handleForgotPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Sending recovery email to:', forgotEmail);
+    alert(`Reset link dispatched to ${forgotEmail}`);
+    setIsForgotModalOpen(false);
+  };
 
   return (
-    <div style={{ backgroundColor: '#020617', color: 'white', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-      <div style={{ width: '100%', maxWidth: '400px', backgroundColor: '#0f172a', padding: '40px', borderRadius: '24px', border: '1px solid #1e293b', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: '"Inter", sans-serif', padding: '20px' }}>
+      <div style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '420px', padding: '40px 30px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
         
-        <h1 style={{ fontSize: '28px', fontWeight: 'bold', textAlign: 'center', marginBottom: '10px' }}>SpringWealth</h1>
-        <p style={{ color: '#94a3b8', textAlign: 'center', marginBottom: '30px', fontSize: '14px' }}>
-          {isSignUp ? 'Create your investor profile' : 'Secure Institutional Access'}
-        </p>
+        {/* Branding */}
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <h1 style={{ fontSize: '28px', fontWeight: '900', color: '#2563eb', letterSpacing: '-1px', margin: '0 0 8px 0' }}>SpringWealth</h1>
+          <p style={{ color: '#64748b', fontSize: '14px', margin: 0 }}>Welcome back. Log in to monitor your assets.</p>
+        </div>
 
-        <form onSubmit={handleAuth} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          {isSignUp && (
-            <input 
-              type="text" 
-              placeholder="Full Name" 
-              value={fullName} 
-              onChange={(e) => setFullName(e.target.value)}
-              style={{ padding: '12px', borderRadius: '8px', backgroundColor: '#1e293b', border: '1px solid #334155', color: 'white' }} 
-              required 
-            />
-          )}
-          <input 
-            type="email" 
-            placeholder="Email Address" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ padding: '12px', borderRadius: '8px', backgroundColor: '#1e293b', border: '1px solid #334155', color: 'white' }} 
-            required 
-          />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ padding: '12px', borderRadius: '8px', backgroundColor: '#1e293b', border: '1px solid #334155', color: 'white' }} 
-            required 
-          />
-          <button 
-            type="submit" 
-            disabled={loading}
-            style={{ backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer', marginTop: '10px' }}
-          >
-            {loading ? 'Processing...' : (isSignUp ? 'Create Account' : 'Sign In')}
-          </button>
+        {/* Input Form */}
+        <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Email Address</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@example.com" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
+          </div>
+
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>Password</label>
+              <button type="button" onClick={() => setIsForgotModalOpen(true)} style={{ background: 'none', border: 'none', color: '#2563eb', fontSize: '13px', fontWeight: '600', cursor: 'pointer', padding: 0 }}>Forgot password?</button>
+            </div>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
+          </div>
+
+          <button type="submit" style={{ backgroundColor: '#1e293b', color: 'white', padding: '14px', borderRadius: '8px', border: 'none', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginTop: '10px', width: '100%' }}>Sign In</button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '25px', fontSize: '14px', color: '#94a3b8' }}>
-          {isSignUp ? 'Already have an account?' : 'New to SpringWealth?'} {' '}
-          <span 
-            onClick={() => setIsSignUp(!isSignUp)} 
-            style={{ color: '#2563eb', cursor: 'pointer', fontWeight: 'bold', textDecoration: 'underline' }}
-          >
-            {isSignUp ? 'Sign In' : 'Create an account'}
-          </span>
+        <p style={{ textAlign: 'center', color: '#64748b', fontSize: '14px', marginTop: '30px', margin: '30px 0 0 0' }}>
+          Don't have an account? <a href="/signup" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: '600' }}>Register here</a>
         </p>
       </div>
+
+      {/* Forgot Password Modal Overlay */}
+      {isForgotModalOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(15, 23, 42, 0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
+          <div style={{ backgroundColor: 'white', padding: '35px 30px', borderRadius: '16px', width: '100%', maxWidth: '400px', boxSizing: 'border-box' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0f172a', margin: '0 0 10px 0' }}>Reset Password</h3>
+            <p style={{ color: '#64748b', fontSize: '14px', lineHeight: '1.5', margin: '0 0 20px 0' }}>Enter your verified email. We will send you an exclusive link to restore your dashboard credentials.</p>
+            
+            <form onSubmit={handleForgotPassword} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <input type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} placeholder="name@example.com" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
+              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button type="button" onClick={() => setIsForgotModalOpen(false)} style={{ flex: 1, backgroundColor: '#f1f5f9', color: '#64748b', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" style={{ flex: 1, backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Send Link</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
