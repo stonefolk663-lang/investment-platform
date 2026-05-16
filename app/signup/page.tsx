@@ -6,9 +6,8 @@ export default function SignUp() {
     fullName: '',
     email: '',
     password: '',
-    country: '',      // Open text field for any country in the world
-    phoneCode: '+1',   // Defaults to +1 so they immediately see the expected format
-    phone: '',
+    country: '',      // Captures the country name completely open
+    phone: '',        // Simplified single input box for the phone number
     socialType: 'WhatsApp',
     socialHandle: ''
   });
@@ -19,10 +18,8 @@ export default function SignUp() {
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    // Combines the custom typed code and phone number smoothly for your backend
-    const fullPhoneNumber = `${formData.phoneCode} ${formData.phone}`;
-    console.log('Registering global user with custom inputs:', { ...formData, fullPhone: fullPhoneNumber });
-    // Your database registration logic hooks here
+    console.log('Registering global profile:', formData);
+    // Secure backend database integration hooks here
   };
 
   return (
@@ -38,33 +35,28 @@ export default function SignUp() {
         {/* Onboarding Form */}
         <form onSubmit={handleSignUp} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
+          {/* Full Name */}
           <div>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Full Name</label>
             <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="John Doe" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
           </div>
 
+          {/* Email Address */}
           <div>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Email Address</label>
             <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="name@example.com" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
           </div>
 
-          {/* Country Text Input */}
+          {/* Open Country Field */}
           <div>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Country</label>
             <input type="text" name="country" value={formData.country} onChange={handleInputChange} placeholder="e.g. United States, Nepal, Turkey" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
           </div>
 
-          {/* Open Code and Phone Flex Section */}
-          <div style={{ display: 'flex', gap: '15px', flexDirection: 'row' }}>
-            <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Country Code</label>
-              <input type="text" name="phoneCode" value={formData.phoneCode} onChange={handleInputChange} placeholder="+1" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', textAlign: 'center', outline: 'none', fontSize: '15px', boxSizing: 'border-box', height: '47px' }} required />
-            </div>
-            
-            <div style={{ flex: 2 }}>
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Phone Number</label>
-              <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="205 555 0199" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box', height: '47px' }} required />
-            </div>
+          {/* Cleaned Single Phone Input Field */}
+          <div>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Phone Number</label>
+            <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Include country code (e.g. +1 205...)" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box', height: '47px' }} required />
           </div>
 
           {/* Chat System Handle */}
@@ -83,6 +75,7 @@ export default function SignUp() {
             </div>
           </div>
 
+          {/* Password */}
           <div>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#0f172a', marginBottom: '6px' }}>Secure Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="••••••••" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
