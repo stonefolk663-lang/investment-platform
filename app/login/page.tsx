@@ -1,13 +1,17 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Injects the Next.js router tool
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'; // Import Supabase Client
 
 export default function SignIn() {
   const router = useRouter(); // Initializes the router redirect feature
+  const supabase = createClientComponentClient(); // Initialize Supabase connection
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
+  const [loading, setLoading] = useState(false); // To prevent double-clicking
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,11 +21,26 @@ export default function SignIn() {
     router.push('/dashboard'); 
   };
 
-  const handleForgotPassword = (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Sending recovery email to:', forgotEmail);
-    alert(`Reset link dispatched to ${forgotEmail}`);
-    setIsForgotModalOpen(false);
+    setLoading(true);
+
+    console.log('Requesting recovery from Supabase for:', forgotEmail);
+    
+    // This is the active trigger engine that hooks up to your new Resend SMTP settings!
+    const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+      redirectTo: 'https://investment-platform-dont.vercel.app/dashboard/update-password',
+    });
+
+    setLoading(false);
+
+    if (error) {
+      console.error("Supabase Reset Error:", error.message);
+      alert(`Error: ${error.message}`);
+    } else {
+      alert(`Reset link safely dispatched to ${forgotEmail}. Please check your inbox and spam folder.`);
+      setIsForgotModalOpen(false);
+    }
   };
 
   return (
@@ -69,7 +88,9 @@ export default function SignIn() {
               <input type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} placeholder="name@example.com" style={{ width: '100%', padding: '14px 16px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
               <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                 <button type="button" onClick={() => setIsForgotModalOpen(false)} style={{ flex: 1, backgroundColor: '#f1f5f9', color: '#64748b', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Cancel</button>
-                <button type="submit" style={{ flex: 1, backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Send Link</button>
+                <button type="submit" disabled={loading} style={{ flex: 1, backgroundColor: '#2563eb', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}>
+                  {loading ? 'Sending...' : 'Send Link'}
+                </button>
               </div>
             </form>
           </div>
