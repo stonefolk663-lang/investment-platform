@@ -75,11 +75,11 @@ export default function Dashboard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #cbd5e1', paddingBottom: '20px' }}>
           
           {/* Brand Logo Container */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <img 
               src="/LOGO.PNG.png" 
               alt="SpringWealth Logo" 
-              style={{ height: '45px', width: 'auto', objectFit: 'contain' }} 
+              style={{ height: '70px', width: 'auto', maxWidth: '240px', objectFit: 'contain' }} 
             />
             <span style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Portal</span>
           </div>
