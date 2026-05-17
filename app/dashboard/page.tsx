@@ -83,7 +83,7 @@ export default function Dashboard() {
           {/* Brand Logo Container */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <img 
-              src="/SPRING-removebg-preview.png" 
+              src="/LOGO.png" 
               alt="SpringWealth Logo" 
               style={{ height: '45px', width: 'auto', objectFit: 'contain' }} 
             />
