@@ -79,7 +79,16 @@ export default function Dashboard() {
         
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px', borderBottom: '1px solid #cbd5e1', paddingBottom: '20px' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#0f172a' }}>SpringWealth <span style={{ color: '#2563eb' }}>Portal</span></h1>
+          
+          {/* Brand Logo Container */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <img 
+              src="/SPRING-removebg-preview.png" 
+              alt="SpringWealth Logo" 
+              style={{ height: '45px', width: 'auto', objectFit: 'contain' }} 
+            />
+            <span style={{ fontSize: '18px', fontWeight: '800', color: '#0f172a', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Portal</span>
+          </div>
           
           <a href="/dashboard/profile" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ textAlign: 'right' }}>
