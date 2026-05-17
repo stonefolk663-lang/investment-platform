@@ -11,12 +11,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getData = async () => {
-      // 1. Get Logged In User Session
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
 
       if (user) {
-        // 2. Pull Live Balance from your existing 'profiles' table
         const { data: profileData } = await supabase
           .from('profiles')
           .select('wallet_balance')
@@ -28,7 +26,6 @@ export default function Dashboard() {
         }
         setLoadingBalance(false)
 
-        // 3. Get Recent Transactions list
         const { data: txData } = await supabase
           .from('transactions')
           .select('*')
@@ -41,7 +38,6 @@ export default function Dashboard() {
     }
     getData()
 
-    // 4. Inject Tawk.to Live Chat Widget
     var Tawk_API = (window as any).Tawk_API || {}, Tawk_LoadStart = new Date();
     const s1 = document.createElement("script");
     const s0 = document.getElementsByTagName("script")[0];
@@ -63,15 +59,13 @@ export default function Dashboard() {
   const fullName = user?.user_metadata?.full_name || 'Investor'
   const initial = fullName.charAt(0).toUpperCase()
 
-  // Gamification Goal Metrics (Targeting a $10,000 Milestone)
-  const targetMilestone = 10000;
-  const progressPercentage = Math.min((balance / targetMilestone) * 100, 100);
+  const targetMilestone = 10000
+  const progressPercentage = Math.min((balance / targetMilestone) * 100, 100)
 
-  // Dynamic Badges based entirely on your database profile value
-  const isAccountActive = balance > 0;
-  const portfolioWeather = isAccountActive ? '🟢 Funded' : '🌤️ Awaiting Funding';
-  const statusBadgeColor = isAccountActive ? '#16a34a' : '#475569';
-  const statusBadgeBg = isAccountActive ? 'rgba(22, 163, 74, 0.1)' : 'rgba(71, 85, 105, 0.1)';
+  const isAccountActive = balance > 0
+  const portfolioWeather = isAccountActive ? '🟢 Funded' : '🌤️ Awaiting Funding'
+  const statusBadgeColor = isAccountActive ? '#16a34a' : '#475569'
+  const statusBadgeBg = isAccountActive ? 'rgba(22, 163, 74, 0.1)' : 'rgba(71, 85, 105, 0.1)'
 
   return (
     <div style={{ backgroundColor: '#f1f5f9', color: '#0f172a', minHeight: '100vh', padding: '20px', fontFamily: 'sans-serif' }}>
@@ -148,4 +142,45 @@ export default function Dashboard() {
           
           {transactions.length > 0 ? (
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '10
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ color: '#64748b', fontSize: '12px' }}>
+                    <th style={{ padding: '12px' }}>TYPE</th>
+                    <th style={{ padding: '12px' }}>AMOUNT</th>
+                    <th style={{ padding: '12px' }}>STATUS</th>
+                    <th style={{ padding: '12px' }}>DATE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transactions.map((tx) => (
+                    <tr key={tx.id} style={{ borderTop: '1px solid #e2e8f0' }}>
+                      <td style={{ padding: '15px', fontSize: '14px', fontWeight: '600', color: '#0f172a' }}>{tx.type.toUpperCase()}</td>
+                      <td style={{ padding: '15px', fontSize: '14px', color: '#0f172a' }}>${tx.amount.toFixed(2)}</td>
+                      <td style={{ padding: '15px' }}>
+                        <span style={{ 
+                          padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 'bold',
+                          backgroundColor: tx.status === 'pending' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(22, 163, 74, 0.1)',
+                          color: tx.status === 'pending' ? '#d97706' : '#16a34a'
+                        }}>
+                          {tx.status.toUpperCase()}
+                        </span>
+                      </td>
+                      <td style={{ padding: '15px', fontSize: '12px', color: '#64748b' }}>
+                        {new Date(tx.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div style={{ color: '#64748b', textAlign: 'center', padding: '50px 0' }}>
+              <p style={{ margin: 0 }}>No transactions yet.</p>
+            </div>
+          )}
+        </div>
+        
+      </div>
+    </div>
+  )
+}
