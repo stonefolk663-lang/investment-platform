@@ -6,32 +6,42 @@ export default function Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [transactions, setTransactions] = useState<any[]>([])
   const [balance, setBalance] = useState(0)
+  const [loadingBalance, setLoadingBalance] = useState(true)
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    // 1. Get User Data and Transactions
     const getData = async () => {
+      // 1. Get Logged In User Session
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
 
       if (user) {
+        // 2. Pull Live Balance from your existing 'profiles' table
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('wallet_balance')
+          .eq('id', user.id)
+          .single()
+
+        if (profileData) {
+          setBalance(profileData.wallet_balance || 0)
+        }
+        setLoadingBalance(false)
+
+        // 3. Get Recent Transactions list
         const { data: txData } = await supabase
           .from('transactions')
           .select('*')
           .order('created_at', { ascending: false })
         
         setTransactions(txData || [])
-
-        const total = txData
-          ?.filter(tx => tx.status === 'completed' && tx.type === 'deposit')
-          .reduce((sum, tx) => sum + tx.amount, 0)
-        
-        setBalance(total || 0)
+      } else {
+        setLoadingBalance(false)
       }
     }
     getData()
 
-    // 2. Inject Tawk.to Live Chat Widget (Using your real keys)
+    // 4. Inject Tawk.to Live Chat Widget
     var Tawk_API = (window as any).Tawk_API || {}, Tawk_LoadStart = new Date();
     const s1 = document.createElement("script");
     const s0 = document.getElementsByTagName("script")[0];
@@ -45,7 +55,6 @@ export default function Dashboard() {
       document.head.appendChild(s1);
     }
 
-    // Cleanup script when component unmounts to prevent duplicated widgets
     return () => {
       s1.remove();
     }
@@ -58,9 +67,9 @@ export default function Dashboard() {
   const targetMilestone = 10000;
   const progressPercentage = Math.min((balance / targetMilestone) * 100, 100);
 
-  // Portfolio Performance Weather Rules
+  // Dynamic Badges based entirely on your database profile value
   const isAccountActive = balance > 0;
-  const portfolioWeather = isAccountActive ? '☀️ Clear & Bullish' : '🌤️ Awaiting Funding';
+  const portfolioWeather = isAccountActive ? '🟢 Funded' : '🌤️ Awaiting Funding';
   const statusBadgeColor = isAccountActive ? '#16a34a' : '#475569';
   const statusBadgeBg = isAccountActive ? 'rgba(22, 163, 74, 0.1)' : 'rgba(71, 85, 105, 0.1)';
 
@@ -91,11 +100,12 @@ export default function Dashboard() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <p style={{ color: '#475569', fontSize: '12px', margin: 0, fontWeight: '600', textTransform: 'uppercase' }}>Total Balance</p>
               <span style={{ fontSize: '12px', fontWeight: 'bold', color: statusBadgeColor, backgroundColor: statusBadgeBg, padding: '4px 8px', borderRadius: '6px' }}>
-                {portfolioWeather}
+                {loadingBalance ? 'Loading...' : portfolioWeather}
               </span>
             </div>
-            <h2 style={{ fontSize: '36px', fontWeight: 'bold', margin: '12px 0 0 0', color: '#0f172a', letterSpacing: '-0.5px' }}>${balance.toFixed(2)}</h2>
-            <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#16a34a', fontWeight: '500' }}>Active Profits: $0.00 🔥</p>
+            <h2 style={{ fontSize: '36px', fontWeight: 'bold', margin: '12px 0 0 0', color: '#0f172a', letterSpacing: '-0.5px' }}>
+              {loadingBalance ? '$0.00' : `$${balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+            </h2>
           </div>
 
           {/* Gamified Goal Progress Tracker Bar Widget */}
