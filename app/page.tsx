@@ -112,7 +112,7 @@ export default function LandingPage() {
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? '40px' : '80px', alignItems: 'center' }}>
           <div style={{ flex: 1, width: '100%' }}>
             <img 
-              src="https://images.unsplash.com/photo-1611974714658-75d4f1ad33da?auto=format&fit=crop&q=80&w=800" 
+              src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?auto=format&fit=crop&w=800&q=80" 
               alt="Trading Environment" 
               style={{ width: '100%', height: isMobile ? '280px' : '450px', objectFit: 'cover', borderRadius: '24px', boxShadow: '0 20px 40px -15px rgba(0,0,0,0.1)' }}
             />
@@ -158,7 +158,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* NEW: Reviews and Trust Section */}
+      {/* Reviews and Trust Section */}
       <section id="reviews" style={{ padding: isMobile ? '60px 5%' : '100px 8%', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: '60px' }}>
           <h2 style={{ fontSize: isMobile ? '32px' : '44px', fontWeight: '900', color: '#0f172a', margin: '0 0 10px 0', letterSpacing: '-1px' }}>Trusted by Investors Worldwide</h2>
