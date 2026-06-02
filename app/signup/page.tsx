@@ -1,7 +1,13 @@
 'use client'
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; 
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'; 
 
 export default function SignUp() {
+  const router = useRouter(); 
+  const supabase = createClientComponentClient(); 
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -16,15 +22,37 @@ export default function SignUp() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Registering global profile:', formData);
-    // Secure backend database integration hooks here
+    setLoading(true);
+
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+      options: {
+        data: {
+          full_name: formData.fullName,
+          country: formData.country,
+          phone: formData.phone,
+          social_type: formData.socialType,
+          social_handle: formData.socialHandle
+        },
+        emailRedirectTo: 'https://thespringwealth.com/auth/callback', 
+      }
+    });
+
+    setLoading(false);
+
+    if (error) {
+      alert(`Registration Error: ${error.message}`);
+    } else {
+      alert('Registration initiated! Please check your email inbox to verify your account.');
+    }
   };
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#f8fafc', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: '"Inter", sans-serif', padding: '40px 20px' }}>
-      <div style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '480px', padding: '40px 30px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
+      <div style={{ backgroundColor: '#ffffff', width: '100%', maxWidth: '#480px', padding: '40px 30px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.05)' }}>
         
         {/* Header Branding */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -81,7 +109,13 @@ export default function SignUp() {
             <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="••••••••" style={{ width: '100%', padding: '12px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '15px', boxSizing: 'border-box' }} required />
           </div>
 
-          <button type="submit" style={{ backgroundColor: '#2563eb', color: 'white', padding: '14px', borderRadius: '8px', border: 'none', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', marginTop: '10px', width: '100%', boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}>Complete Registration</button>
+          <button 
+            type="submit" 
+            disabled={loading}
+            style={{ backgroundColor: '#2563eb', color: 'white', padding: '14px', borderRadius: '8px', border: 'none', fontWeight: 'bold', fontSize: '15px', cursor: loading ? 'not-allowed' : 'pointer', marginTop: '10px', width: '100%', opacity: loading ? 0.7 : 1, boxShadow: '0 4px 12px rgba(37, 99, 235, 0.2)' }}
+          >
+            {loading ? 'Registering global profile...' : 'Complete Registration'}
+          </button>
         </form>
 
         <p style={{ textAlign: 'center', color: '#64748b', fontSize: '14px', marginTop: '25px', margin: '25px 0 0 0' }}>
