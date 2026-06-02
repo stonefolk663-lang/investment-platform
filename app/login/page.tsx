@@ -43,7 +43,7 @@ export default function SignIn() {
     setResetLoading(true);
     
     const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
-      redirectTo: 'https://investment-platform-dont.vercel.app/dashboard/update-password',
+      redirectTo: 'https://thespringwealth.com/dashboard/update-password',
     });
 
     setResetLoading(false);
